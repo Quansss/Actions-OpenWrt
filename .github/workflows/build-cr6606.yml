@@ -20,7 +20,7 @@ jobs:
           sudo apt update -y
           sudo apt install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev python3
 
-      - name: 拉取 ImmortalWrt 源码（稳定不墙）
+      - name: 拉取 ImmortalWrt 源码
         run: |
           git clone https://github.com/immortalwrt/immortalwrt --depth=1 openwrt
 
@@ -36,17 +36,17 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: 生成 CR6606 配置（含插件）
+      - name: 生成 CR6606 配置
         run: |
           cd openwrt
           cat > .config << EOF
-CONFIG_TARGET_ramips=y
-CONFIG_TARGET_ramips_mt7621=y
-CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_mi-router-cr6606=y
-CONFIG_PACKAGE_luci-app-ssr-plus=y
-CONFIG_PACKAGE_luci-app-passwall2=y
-CONFIG_PACKAGE_luci-app-frpc=y
-EOF
+          CONFIG_TARGET_ramips=y
+          CONFIG_TARGET_ramips_mt7621=y
+          CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_mi-router-cr6606=y
+          CONFIG_PACKAGE_luci-app-ssr-plus=y
+          CONFIG_PACKAGE_luci-app-passwall2=y
+          CONFIG_PACKAGE_luci-app-frpc=y
+          EOF
           make defconfig
 
       - name: 下载软件包
