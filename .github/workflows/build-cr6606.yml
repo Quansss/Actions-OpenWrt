@@ -1,4 +1,4 @@
-name: Build CR6606 Final
+name: Build CR6606
 on:
   workflow_dispatch:
 
@@ -13,19 +13,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install
         run: sudo apt update && sudo apt install build-essential libncurses-dev bison flex libssl-dev python3 -y
 
-      - name: Clone source
+      - name: Clone
         run: git clone https://gitee.com/immortalwrt/immortalwrt.git --depth=1 openwrt
 
-      - name: Add plugins
+      - name: Plugins
         run: |
           cd openwrt/package
           git clone https://gitee.com/kooljun/helloworld.git
           git clone https://gitee.com/kooljun/passwall2.git
 
-      - name: Update feeds
+      - name: Feeds
         run: |
           cd openwrt
           ./scripts/feeds update -a
@@ -34,14 +34,12 @@ jobs:
       - name: Config
         run: |
           cd openwrt
-          cat > .config << EOF
-CONFIG_TARGET_ramips=y
-CONFIG_TARGET_ramips_mt7621=y
-CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_mi-router-cr6606=y
-CONFIG_PACKAGE_luci-app-ssr-plus=y
-CONFIG_PACKAGE_luci-app-passwall2=y
-CONFIG_PACKAGE_luci-app-frpc=y
-EOF
+          echo "CONFIG_TARGET_ramips=y" > .config
+          echo "CONFIG_TARGET_ramips_mt7621=y" >> .config
+          echo "CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_mi-router-cr6606=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-ssr-plus=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-passwall2=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-frpc=y" >> .config
           make defconfig
 
       - name: Download
